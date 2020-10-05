@@ -189,7 +189,7 @@ public:
 	}
 	bool remove(const T& e)
 	{
-		BinNodePosi(T)x = search(e);
+		BinNodePosi(T)&x = search(e);
 		if (!x)return 0;
 		removeAt(x, _hot);
 		--this->_size;
@@ -347,6 +347,37 @@ int main()
 		cout << avl_tree.size() << endl;
 		avl_tree.inTra(avl_tree.root());
 	}
-	
+	getchar();
+	cout << "test4" << endl;
+	{
+		AVL<int>avl_tree;
+		for (int i = 0; i < 2*1e6; ++i)
+			avl_tree.insert(i);
+		cout << avl_tree.size() << endl;
+		//	avl_tree.remove(1);
+		for (int i = 0; i < 2*1e6-100; ++i)
+		{
+			avl_tree.remove(i);
+		}
+		cout << avl_tree.size() << endl;
+		avl_tree.inTra(avl_tree.root());
+		cout << endl;
+	}
+	getchar();
+	cout << "test6" << endl;
+	{
+		BST<int>avl_tree;
+		for (int i = 0; i < 2000; ++i)
+			avl_tree.insert(i);
+		cout << avl_tree.size() << endl;
+		//	avl_tree.remove(1);
+		for (int i = 0; i < 2000 - 100; ++i)
+		{
+			avl_tree.remove(i);
+		}
+		cout << avl_tree.size() << endl;
+		avl_tree.inTra(avl_tree.root());
+		cout << endl;
+	}
 	return 0;
 }
