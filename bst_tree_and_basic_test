@@ -121,6 +121,13 @@ public:
 		cout << x->data << ' ';
 		inTra(x->rc);
 	}
+	void preTra(BinNodePosi(T)x)
+	{
+		if (!x)return;
+		cout << x->data << ' ';
+		preTra(x->lc);
+		preTra(x->rc);
+	}
 };
 template<class T>class BST :public BinTree<T>
 {
@@ -149,6 +156,7 @@ public:
 	{
 		BinNodePosi(T)w = x;
 		BinNodePosi(T)succ = NULL;
+		//hot = w->parent;
 		if (!HasLChild(*x))
 			succ = x = x->rc;
 		else if (!HasRChild(*x))
@@ -157,11 +165,13 @@ public:
 		{
 			w = w->succ();
 			swap(x->data, w->data);
-			//BinNodePosi(T) u = w->parent;
-			//((u == x) ? u->rc : u->lc) = succ = w->rc;
+			//succ = w->rc;
+			BinNodePosi(T) u = w->parent;
+			((u == x) ? u->rc : u->lc) = succ = w->rc;
 		}
+		//cout << (w->parent->rc == x);
 		hot = w->parent;
-		FromParentTo(*w) = succ;
+		//FromParentTo(*w) = succ;
 		if (succ)
 			succ->parent = hot;
 		delete w;
@@ -169,7 +179,7 @@ public:
 	}
 	bool remove(const T& e)
 	{
-		BinNodePosi(T)x = search(e);   
+		BinNodePosi(T)&x = search(e);   
 		if (!x)return 0;
 		removeAt(x, _hot); 
 		--this->_size;
@@ -179,16 +189,32 @@ public:
 };
 int main()
 {
-	int arr[] = { 5,3,8,2,4,6,9,1,7,10 };
-	BST<int>bstTree;
-	for (int i = 0; i < 10; ++i)
-		bstTree.insert(arr[i]-1);
-	cout << bstTree.size();
-	cout << endl;
-	bstTree.inTra(bstTree.root());
-	cout << endl;
-	for (int i = 5; i < 10; ++i)
-		bstTree.remove(i);
-	bstTree.inTra(bstTree.root());
+	cout << "test1" << endl;
+	{
+		int arr[] = { 36,27,6,58,53,40,46,69,64 };
+		BST<int>bstTree;
+		for (int i = 0; i < 9; ++i)
+			bstTree.insert(arr[i]);
+		bstTree.inTra(bstTree.root());
+		cout << endl;
+		bstTree.preTra(bstTree.root());
+		cout << endl;
+		int arr2[] = { 69,36,40,46,53 };
+		for (int i = 0; i < 5; ++i)
+		{
+			bstTree.remove(arr2[i]);
+		}
+		bstTree.inTra(bstTree.root());
+		cout << endl;
+	}
+	cout << "test2" << endl;
+	{
+		BST<int>bstTree;
+		for (int i = 0; i < 100; ++i)
+			bstTree.insert(i);
+		for (int i = 0; i < 50; ++i)
+			bstTree.remove(i);
+		bstTree.inTra(bstTree.root());
+	}
 	return 0;
 }
