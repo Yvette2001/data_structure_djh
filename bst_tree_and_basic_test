@@ -59,7 +59,7 @@ struct BinNode
 		}
 		else
 		{
-			while (IsRChild(s))s = s->parent;
+			while (IsRChild(*s))s = s->parent;
 			s = s->parent;
 		}
 		return s;
@@ -145,7 +145,7 @@ public:
 		this->updateHeightAbove(x);
 		return x;
 	}
-	static BinNodePosi(T)removeAt(BinNodePosi(T)& x, BinNodePosi(T)& hot)
+	BinNodePosi(T)removeAt(BinNodePosi(T)& x, BinNodePosi(T)& hot)
 	{
 		BinNodePosi(T)w = x;
 		BinNodePosi(T)succ = NULL;
@@ -155,29 +155,40 @@ public:
 			succ = x = x->lc;
 		else
 		{
-			w = x->succ();
+			w = w->succ();
 			swap(x->data, w->data);
-			FromParentTo(*w) = succ = w->rc;
+			//BinNodePosi(T) u = w->parent;
+			//((u == x) ? u->rc : u->lc) = succ = w->rc;
 		}
 		hot = w->parent;
-		if (succ)succ->parent = hot;
+		FromParentTo(*w) = succ;
+		if (succ)
+			succ->parent = hot;
 		delete w;
 		return succ;
 	}
 	bool remove(const T& e)
 	{
-		BinNodePosi(T)x = search(e); if (!x)return 0;
-		removeAt(x, _hot); --this->_size;
+		BinNodePosi(T)x = search(e);   
+		if (!x)return 0;
+		removeAt(x, _hot); 
+		--this->_size;
 		this->updateHeightAbove(_hot);
 		return 1;
 	}
 };
 int main()
 {
+	int arr[] = { 5,3,8,2,4,6,9,1,7,10 };
 	BST<int>bstTree;
-	for (int i = 0; i < 20; ++i)bstTree.insert(i);
+	for (int i = 0; i < 10; ++i)
+		bstTree.insert(arr[i]-1);
 	cout << bstTree.size();
 	cout << endl;
+	bstTree.inTra(bstTree.root());
+	cout << endl;
+	for (int i = 5; i < 10; ++i)
+		bstTree.remove(i);
 	bstTree.inTra(bstTree.root());
 	return 0;
 }
